@@ -1,0 +1,90 @@
+# vocab.txt — starter: web stack vocabulary
+#
+# Designed to be stacked on top of starter-claude-code.txt rather than used
+# alone — paste both into one vocab.txt if you want the lot.
+#
+#   heard -> written      a correction, applied to the transcript (case-insensitive)
+#   Word Or Phrase        a bias term: nudges Whisper to hear it correctly
+#
+# Blank lines and everything after a # are ignored. Restart the tool after editing.
+
+# --- bias terms: frameworks, hosts, databases --------------------------------
+Next.js
+React
+TypeScript
+JavaScript
+Node
+Tailwind
+Vite
+Astro
+Supabase
+PostgreSQL
+Postgres
+Prisma
+Vercel
+Netlify
+Cloudflare
+Docker
+Kubernetes
+nginx
+API
+REST
+GraphQL
+webhook
+endpoint
+middleware
+component
+prop
+state
+hook
+schema
+migration
+query
+index
+cache
+auth
+OAuth
+JWT
+env file
+build
+deploy
+staging
+production
+responsive
+viewport
+CSS
+SVG
+favicon
+
+# --- corrections: what it mishears, and what you meant ------------------------
+next js -> Next.js
+next jay ess -> Next.js
+nextjs -> Next.js
+type script -> TypeScript
+java script -> JavaScript
+tail wind -> Tailwind
+sue pa base -> Supabase
+super base -> Supabase
+soup a base -> Supabase
+post gres -> Postgres
+postgre sql -> PostgreSQL
+verscell -> Vercel
+ver sell -> Vercel
+net lify -> Netlify
+cloud flare -> Cloudflare
+kuber netes -> Kubernetes
+engine x -> nginx
+n ginx -> nginx
+a p i -> API
+graph ql -> GraphQL
+graph q l -> GraphQL
+o auth -> OAuth
+oh auth -> OAuth
+j w t -> JWT
+c s s -> CSS
+s v g -> SVG
+fav icon -> favicon
+web hook -> webhook
+end point -> endpoint
+middle ware -> middleware
+view port -> viewport

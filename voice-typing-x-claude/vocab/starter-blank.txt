@@ -1,0 +1,40 @@
+# vocab.txt — teach the tool your words.
+#
+# Two kinds of line:
+#
+#   heard -> written      a correction, applied to the transcript (case-insensitive)
+#   Word Or Phrase        a bias term: nudges Whisper to hear it correctly in the first place
+#
+# Add BOTH for anything that matters. The bias term works while Whisper is
+# listening; the correction cleans up afterwards. Each catches what the other
+# misses, which is exactly why there are two layers.
+#
+# Blank lines and everything after a # are ignored.
+# The file is read at STARTUP ONLY — restart the tool after editing it.
+#
+# Don't sit here guessing what to add. Use the tool for a week, then read what
+# it actually got wrong:
+#
+#   Get-Content history.jsonl | ConvertFrom-Json | Select-Object -Last 20 raw, final
+#
+# `raw` is what Whisper heard, `final` is what you got. Where those should
+# differ and don't, you've found your next line.
+#
+# One warning: never put an ordinary English word on the left of a correction.
+# A rule like `cloud -> Claude` fires on "cloud storage" too, and you'll spend
+# an afternoon working out why your dictation has gone strange.
+
+
+# --- bias terms: the proper nouns of your world -------------------------------
+# Your projects, clients, products, place names, colleagues, the jargon your
+# field uses that a general English model has never met. One per line.
+
+
+
+
+# --- corrections: what it mishears, and what you meant ------------------------
+# Format:  what you hear it type -> what you actually said
+# Add these as they come up, not in advance.
+
+
+

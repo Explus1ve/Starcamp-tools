@@ -1,0 +1,75 @@
+# vocab.txt — starter: Claude Code, terminal and git
+#
+# Two kinds of line:
+#
+#   heard -> written      a correction, applied to the transcript (case-insensitive)
+#   Word Or Phrase        a bias term: nudges Whisper to hear it correctly in the first place
+#
+# Blank lines and everything after a # are ignored.
+# Restart the tool after editing. Check history.jsonl to see what it actually mishears.
+
+# --- bias terms: the nouns of the work ---------------------------------------
+Claude Code
+Anthropic
+Opus
+Sonnet
+Haiku
+subagent
+MCP server
+slash command
+prompt
+context window
+token
+repo
+branch
+commit
+merge
+rebase
+pull request
+stash
+diff
+staging
+remote
+origin
+main
+worktree
+terminal
+PowerShell
+CLI
+environment variable
+config
+JSON
+YAML
+markdown
+regex
+stdout
+path
+
+# --- corrections: what it mishears, and what you meant ------------------------
+cloud code -> Claude Code
+clod code -> Claude Code
+claud code -> Claude Code
+anthropic ai -> Anthropic
+sub agent -> subagent
+m c p -> MCP
+mcp -> MCP
+c l i -> CLI
+j son -> JSON
+jay son -> JSON
+ya mel -> YAML
+mark down -> markdown
+re gex -> regex
+git hub -> GitHub
+get hub -> GitHub
+git ignore -> gitignore
+re base -> rebase
+pull request -> PR
+power shell -> PowerShell
+std out -> stdout
+en var -> environment variable
+work tree -> worktree
+re factor -> refactor
+
+# Note: deliberately NOT included — "cloud -> Claude". It fires on "cloud
+# storage" and every other legitimate use of the word. Be careful with
+# corrections whose left side is an ordinary English word.
