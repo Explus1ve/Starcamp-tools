@@ -11,24 +11,23 @@ card, which is why it's both free and better than the dictation built into
 Windows.
 
 This folder is the **documentation shelf** for it — how to set it up on a
-machine, how to use it well, and how to handle the one piece that can't
-live in a repo. The tool's own code lives in its own repo.
+machine, how to use it well, and how to handle the one piece nobody can
+ship you. **The working code is here too, in `voicetype/`.**
 
 ## The three pieces, and where each one lives
 
 This is the part worth understanding before anything else, because it's
-also the answer to "why isn't it all in one place?"
+also the answer to "why is this folder so small if the tool is so big?"
 
-| Piece | Size | Where it lives | In git? |
-|---|---|---|---|
-| **The code** — nine small Python files | ~50 KB | `github.com/Explus1ve/voice-typing` | Yes |
-| **The libraries** — Python, CUDA, audio | ~2.2 GB | A `.venv` folder created on your machine | No — rebuilt from `uv.lock` |
-| **The Whisper model** — the AI itself | ~1.6 GB | A shared cache in your user folder | **No — and it never was** |
+| Piece | Size | Where it lives |
+|---|---|---|
+| **The code** — five small Python files | ~33 KB | `voicetype/`, right here |
+| **The libraries** — Python, CUDA, audio | ~2.2 GB | A `.venv` built on your machine from `uv.lock` |
+| **The Whisper model** — the AI itself | ~1.6 GB | A shared cache in your user folder, fetched on first run |
 
-The model is the piece that can't go in git, and the good news is that
-the tool was already built so it doesn't have to. It's not gitignored as a
-workaround — it never lands in the project folder at all. It downloads
-itself from Hugging Face on first run, into a machine-wide cache that
+The model is the piece that could never travel in a folder, and the good
+news is the tool was built so it doesn't have to. It downloads itself from
+Hugging Face the first time you run it, into a machine-wide cache that
 other AI tools share.
 
 **`THE-MODEL.md` in this folder is the full explanation** — where it
@@ -68,8 +67,9 @@ read that one.
 | File | What it's for |
 |---|---|
 | `START-HERE.md` | The prompt — paste it as your first message to Claude. |
-| `SETUP-VOICETYPE.md` | Getting it running on a machine from nothing: tools, clone, first run. |
-| `THE-MODEL.md` | **The model question.** Why it isn't in the repo, where it is, pre-fetching, offline machines, moving the cache off C:. |
+| `voicetype/` | **The tool itself.** Five Python files, the lockfile, the icon, and `NOTES.md` — read that before changing any of the code. |
+| `SETUP-VOICETYPE.md` | Getting it running from nothing: uv, the environment, first run, the desktop shortcut. |
+| `THE-MODEL.md` | **The model question.** Where it lands on disk, pre-fetching, offline machines, moving the cache off C:. |
 | `USING-IT.md` | Daily use — the hotkey, teaching it words, reading the log, the ring, tuning, what goes wrong. |
 | `vocab/` | Three starter vocabulary files to copy and grow — see `vocab/README.md`. |
 
@@ -78,16 +78,16 @@ read that one.
 1. Read `THE-MODEL.md` first if you're setting this up somewhere with
    limited disk or no internet. Otherwise skip it for now.
 2. Follow `SETUP-VOICETYPE.md`. First run downloads 1.6 GB, once.
-3. Copy a starter file from `vocab/` over the tool's `vocab.txt` and add
-   your own words to it.
+3. Copy a starter file from `vocab/` into the code folder as `vocab.txt`
+   and add your own words to it.
 4. Keep `USING-IT.md` around for the first week — the vocabulary loop is
    the whole difference between "quite good" and "better than typing".
 
 Or skip straight to `START-HERE.md` and hand the whole thing to Claude.
 
-## A note on what's in this folder
+## If you want to change the code
 
-Documentation only — deliberately. The code isn't copied here, because a
-second copy of nine Python files in a reference shelf is a second copy
-that goes stale the first time the real one changes. The repo is the code;
-this is the manual.
+Read `voicetype/NOTES.md` first. It documents four things in the code that
+look like mistakes and are not — each one was a real bug, and each comes
+back the moment someone tidies it. It also states the one rule the tool
+must never break.

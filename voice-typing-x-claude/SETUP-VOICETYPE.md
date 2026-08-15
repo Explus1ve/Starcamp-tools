@@ -27,28 +27,36 @@ step won't find it. Check it worked:
 uv --version
 ```
 
-## 2. Get the code
+## 2. Put the code where you want to keep it
+
+Nothing to download — the tool is in the `voicetype/` folder right here.
+Five Python files, a lockfile and an icon.
+
+Copy that folder somewhere you'll keep it long term, because this is what
+you'll run every day and it will grow your own `vocab.txt` alongside it:
 
 ```bash
-git clone https://github.com/Explus1ve/voice-typing.git D:\Projects\voice-typing
+Copy-Item -Recurse voicetype C:\Tools\voicetype
 ```
 
-If the repo is private, you'll need to be signed in to GitHub as the owner
-— either through the GitHub CLI (`gh auth login`) or Git Credential
-Manager, which prompts you in a browser the first time.
+Anywhere is fine. Avoid a folder that syncs to the cloud — the environment
+you're about to build in step 3 is 2.2 GB of machine-specific binaries and
+you do not want that uploading anywhere.
+
+You can also just run it in place if you're only trying it out.
 
 ## 3. Let it build its environment
 
 ```bash
-cd D:\Projects\voice-typing
+cd C:\Tools\voicetype
 uv sync
 ```
 
 This reads `uv.lock` and installs the exact library versions the tool was
 built against — including the CUDA pieces that let it use your graphics
 card. **It's about 2.2 GB and takes a few minutes.** It creates a `.venv`
-folder inside the project; that folder is machine-specific and isn't in
-git, which is why this step exists at all.
+folder inside the project. That folder is machine-specific, which is why it
+is built here rather than shipped with the code.
 
 ## 4. First run — this is where the model downloads
 
@@ -98,17 +106,26 @@ Three things to know from the very first test:
 
 You'll want this without typing commands. Right-click your desktop → New →
 Shortcut, and point it at the `pythonw.exe` inside the project's `.venv`
-followed by the path to `voicetype.py`. The repo includes an icon
-(`voicetype.ico`) you can set on the shortcut's properties.
+followed by the path to `voicetype.py`. The code folder includes an icon
+(`voicetype.ico`) you can set on the shortcut's properties, and
+`make_icon.py` regenerates it if you want a different one — edit the
+script, not the icon.
 
 Ask Claude to do this bit with you if shortcut targets aren't your idea of
 fun — it's fiddly to describe and trivial to do.
 
 ## 8. Teach it your words
 
-Out of the box it's good at English and bad at your project names. Copy a
-starter file from this folder's `vocab/` over the tool's `vocab.txt`, then
-add your own lines as you go. This is the step that makes it genuinely
+Out of the box it's good at English and bad at your project names.
+
+**There is no `vocab.txt` yet — you make one.** Copy a starter file from
+this folder's `vocab/` into your code folder, named exactly `vocab.txt`:
+
+```bash
+Copy-Item vocab\starter-claude-code.txt C:\Tools\voicetype\vocab.txt
+```
+
+Then add your own lines as you go. This is the step that makes it genuinely
 better than Windows' built-in dictation, and it takes about a minute a
 week. See `vocab/README.md` and the vocabulary section of `USING-IT.md`.
 

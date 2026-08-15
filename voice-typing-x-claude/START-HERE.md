@@ -14,14 +14,15 @@ an unprepared setup goes wrong.
 > used it before and something's broken.] I'm not very technical, so
 > please explain things in plain English and go step by step.
 >
-> There's a documentation folder here: `README.md`, a setup walkthrough
-> (`SETUP-VOICETYPE.md`), a page about the AI model (`THE-MODEL.md`), a
-> usage reference (`USING-IT.md`), and three starter vocabulary files in
-> `vocab/`. The tool's own code isn't here — it lives in its own repo,
-> linked from the README. Here's what I'd like you to do:
+> Everything is in this folder: the tool's code in `voicetype/`, a
+> `README.md`, a setup walkthrough (`SETUP-VOICETYPE.md`), a page about the
+> AI model (`THE-MODEL.md`), a usage reference (`USING-IT.md`), and three
+> starter vocabulary files in `vocab/`. Nothing has to be downloaded from
+> anywhere except the libraries and the model, and both fetch themselves.
+> Here's what I'd like you to do:
 >
 > 1. Read `README.md` and `THE-MODEL.md` before we start. The model is a
->    1.6 GB download that is deliberately not in the repo, and I'd rather
+>    1.6 GB download that cannot ship in a folder, and I'd rather
 >    understand that upfront than hit it as a surprise.
 > 2. **Check my disk space before anything else** — this needs about 4 GB
 >    across two locations, and the model goes to my C: drive by default
@@ -32,10 +33,11 @@ an unprepared setup goes wrong.
 > 4. When we get to the first run, tell me what "normal" looks like —
 >    what it prints, how long the model download takes, and how I know
 >    it's actually listening rather than stuck.
-> 5. Once it works, help me set up `vocab.txt` from `vocab/`. Ask me what
->    words I actually say a lot — my projects, clients, place names, the
->    jargon in my field — rather than guessing. Remind me the tool has to
->    be restarted after every edit to that file.
+> 5. Once it works, help me create my `vocab.txt` from one of the starter
+>    files in `vocab/` — there isn't one yet, I make it. Ask me what words
+>    I actually say a lot — my projects, clients, place names, the jargon
+>    in my field — rather than guessing. Remind me the tool has to be
+>    restarted after every edit to that file.
 > 6. After I've used it for a bit, help me read `history.jsonl` to find
 >    what it's really mishearing, and turn that into new vocab lines.
 >
@@ -52,10 +54,16 @@ an unprepared setup goes wrong.
 
 That's it. Everything else happens in the conversation that follows.
 
-## If you're the one editing the tool, not just running it
+## If you're changing the tool, not just running it
 
-Different job, and this folder isn't the right starting point — the repo's
-own `CLAUDE.md` is. It documents four things in the code that look wrong
-and are deliberate, each of which was a real bug that gets reintroduced
-the moment someone "tidies" it. Read that before changing anything in
+Different job, and it starts at `voicetype/NOTES.md`. It documents four
+things in the code that look wrong and are deliberate — each was a real
+bug, and each comes back the moment someone tidies it. It also states the
+one rule the tool must never break. Read it before touching
 `voicetype.py`, `overlay.py`, or `aurora.py`.
+
+Point your assistant at that file first:
+
+> Before we change anything, read `voicetype/NOTES.md`. It lists four
+> things in this code that look like mistakes and are not. Tell me which
+> of them my change would touch before you write any of it.

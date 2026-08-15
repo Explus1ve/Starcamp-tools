@@ -1,11 +1,12 @@
-# The model — the piece that isn't in the repo
+# The model — the one piece that isn't in this folder
 
-The AI that turns your voice into text is a 1.6 GB file. It cannot go in
-git, and this page is the whole story of how that's handled.
+The AI that turns your voice into text is a 1.6 GB file. It cannot travel
+in a folder or live in git, and this page is the whole story of how that's
+handled.
 
 **The short version: it's already solved, and you don't have to do
 anything.** The tool downloads the model itself on first run. Nothing was
-bodged around, nothing is missing from the repo. Everything below is for
+bodged around, nothing is missing. Everything below is for
 the cases where the automatic behaviour isn't what you want — a machine
 with no internet, a full C: drive, or a slow connection you'd rather not
 wait on at the worst moment.
