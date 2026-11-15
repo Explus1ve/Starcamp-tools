@@ -9,9 +9,9 @@ when a bot's password is involved.
 ---
 
 > I want to set up a Discord server for [describe your project or community
-> in a sentence or two]. I'm not very technical, so please explain things in
-> plain English and go step by step — don't assume I know what a "bot
-> token" or "API" means unless you've just told me.
+> in a sentence or two]. Please explain things in plain English and go
+> step by step — don't assume I know what a "bot token" or "API" means
+> unless you've just told me.
 >
 > There's a toolkit in this folder already worked out: an engine script
 > (`discord-setup.mjs`) plus a read-only inspector (`discord-inspect.mjs`),
@@ -32,8 +32,11 @@ when a bot's password is involved.
 >    password, it goes in a local file, never in our chat. If I ever paste
 >    one into our conversation by accident anyway, stop me immediately and
 >    have me reset it before we do anything else.
-> 5. Once I've run the setup script, help me read the output and fix
->    anything that failed.
+> 5. Have me run the setup script without `--yes` first. That is a
+>    preview: it changes nothing and prints what it would do. Go through
+>    that plan with me in plain words, and only once I say it looks right,
+>    have me run it again with `--yes`. Then help me read the output and
+>    fix anything that failed.
 > 6. Before I delete the setup bot, remind me to run `discord-inspect.mjs`
 >    for a full read-only snapshot — then walk me through deleting the bot
 >    and the local token file.

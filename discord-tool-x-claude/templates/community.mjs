@@ -77,7 +77,7 @@ export const ONBOARDING_QUESTION = {
   options: [
     { id: "1", title: "🛠️ I want to get involved", description: "" },
     { id: "2", title: "🎥 Here for the stream", description: "" },
-    { id: "3", title: "🏕️ Curious what this is", description: "" },
+    { id: "3", title: "💡 Curious what this is", description: "" },
     { id: "4", title: "👀 Just exploring", description: "" },
   ],
 };

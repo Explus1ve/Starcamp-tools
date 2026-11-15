@@ -9,7 +9,7 @@ libraries and 1.6 GB for the AI model.
 
 **Before you start,** read the first half of `THE-MODEL.md` if your C:
 drive is tight or the machine has no internet. Both are easy to handle,
-but much easier *before* you start than halfway through.
+but much easier before you start than halfway through.
 
 ## 1. Install uv
 
@@ -58,23 +58,40 @@ card. **It's about 2.2 GB and takes a few minutes.** It creates a `.venv`
 folder inside the project. That folder is machine-specific, which is why it
 is built here rather than shipped with the code.
 
-## 4. First run — this is where the model downloads
+## 4. Download the model, once, by hand
+
+The tool never goes online, so it does not fetch the model itself. You
+do, once, with this command, from the same folder:
+
+```bash
+uv run python -c "from faster_whisper.utils import download_model; print(download_model('large-v3-turbo'))"
+```
+
+This fetches the Whisper model, **about 1.6 GB, once**, and takes a few
+minutes. It goes into a shared cache in your user folder, not into the
+project. See `THE-MODEL.md` for exactly where and why. When it finishes
+it prints the folder the model landed in. If it gets interrupted, run it
+again: it carries on where it stopped.
+
+This is the only step that goes online.
+
+## 5. First run
 
 ```bash
 uv run voicetype.py
 ```
 
-The first run fetches the Whisper model, **about 1.6 GB, once**. It goes
-into a shared cache in your user folder, not into the project — see
-`THE-MODEL.md` for exactly where and why.
-
 While it's loading you'll see it name the model and the device it's using.
 When it's ready it says so and starts listening.
+
+If it stops straight away and says the model is not on disk, step 4
+didn't finish. It prints the download command; run that, then start it
+again.
 
 **Leave this window open.** It's the program. Closing it stops the tool.
 `Ctrl+C` in that window is the clean way to quit.
 
-## 5. Allow the microphone
+## 6. Allow the microphone
 
 Windows may pop up a microphone permission request the first time. Allow
 it. If you miss it: Settings → Privacy & security → Microphone → make sure
@@ -84,7 +101,7 @@ The tool uses your **Windows default input device**. If you have several
 microphones, set the right one as default in Windows sound settings —
 there's no device picker in the tool.
 
-## 6. Test it
+## 7. Test it
 
 Click into any text box — Notepad is fine for a first try. Hold **Right
 Ctrl**, say a full sentence, release.
@@ -102,7 +119,7 @@ Three things to know from the very first test:
 - **The terminal window prints every result** with timings. If nothing
   appeared at your cursor, look there first — it usually explains why.
 
-## 7. Make it easy to launch
+## 8. Make it easy to launch
 
 You'll want this without typing commands. Right-click your desktop → New →
 Shortcut, and point it at the `pythonw.exe` inside the project's `.venv`
@@ -114,7 +131,7 @@ script, not the icon.
 Ask Claude to do this bit with you if shortcut targets aren't your idea of
 fun — it's fiddly to describe and trivial to do.
 
-## 8. Teach it your words
+## 9. Teach it your words
 
 Out of the box it's good at English and bad at your project names.
 

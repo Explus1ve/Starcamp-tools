@@ -55,6 +55,7 @@ import numpy as np                                    # noqa: E402
 import pyperclip                                      # noqa: E402
 import sounddevice as sd                              # noqa: E402
 from faster_whisper import WhisperModel               # noqa: E402
+from faster_whisper.utils import download_model       # noqa: E402
 from pynput import keyboard                           # noqa: E402
 
 from overlay import Overlay                           # noqa: E402
@@ -151,6 +152,31 @@ def bias_prompt(terms: list[str]) -> str:
     return "Vocabulary: " + ", ".join(terms) + "." if terms else ""
 
 
+# --- phantoms -----------------------------------------------------------------
+
+# Whisper learned from subtitled video, so near-silence can come out as a subtitle
+# credit ("Closed Captioning by www.patreon.com.au", seen 2026-11-03 from a 1.4s
+# accidental hold). Matched against a whole segment, so a real sentence that merely
+# contains "captions by" is kept.
+_PHANTOM = re.compile(
+    r"\W*(?:"
+    r"(?:closed captioning|captions?|captioned|subtitles?|subtitled|transcription) by\b.*"
+    r"|.*\bamara\.org\b.*"
+    r"|(?:thanks|thank you) for watching\W*"
+    r")",
+    re.IGNORECASE | re.DOTALL,
+)
+# Whisper's own silence test: it thinks there was no speech AND it is unsure of the words.
+NO_SPEECH_PROB = 0.6
+LOW_LOGPROB = -1.0
+
+
+def is_phantom(segment) -> bool:
+    if _PHANTOM.fullmatch(segment.text.strip()):
+        return True
+    return segment.no_speech_prob > NO_SPEECH_PROB and segment.avg_logprob < LOW_LOGPROB
+
+
 # --- audio --------------------------------------------------------------------
 
 class Recorder:
@@ -226,11 +252,12 @@ class VoiceType:
 
     def _load_model(self) -> WhisperModel:
         """Try the GPU, prove it works, and drop to CPU rather than dying if it doesn't."""
+        model_path = self._model_path()
         for device, compute in self._candidates():
             print(f"  loading {MODEL_NAME} on {device} ({compute}) ...", flush=True)
             started = time.perf_counter()
             try:
-                model = WhisperModel(MODEL_NAME, device=device, compute_type=compute)
+                model = WhisperModel(model_path, device=device, compute_type=compute)
                 # Also warms the kernels, so the first real utterance isn't the slow one.
                 list(model.transcribe(np.zeros(SAMPLE_RATE, dtype=np.float32), language="en")[0])
             except Exception as exc:
@@ -241,6 +268,19 @@ class VoiceType:
                   f" {len(self.terms)} bias terms\n", flush=True)
             return model
         raise SystemExit("  could not load the model on any device.")
+
+    @staticmethod
+    def _model_path() -> str:
+        """Use the copy on disk only. The app never goes online; updates are fetched by hand."""
+        if os.path.isdir(MODEL_NAME):
+            return MODEL_NAME
+        try:
+            return download_model(MODEL_NAME, local_files_only=True)
+        except Exception:
+            raise SystemExit(
+                f"  {MODEL_NAME} is not on disk. Download it by hand (this goes online):\n"
+                f"  uv run python -c \"from faster_whisper.utils import download_model;"
+                f" print(download_model('{MODEL_NAME}'))\"")
 
     @staticmethod
     def _candidates() -> list[tuple[str, str]]:
@@ -289,7 +329,12 @@ class VoiceType:
                 condition_on_previous_text=False,
                 initial_prompt=self.prompt or None,
             )
-            raw = " ".join(segment.text.strip() for segment in segments).strip()
+            kept, dropped = [], []
+            for segment in segments:
+                (dropped if is_phantom(segment) else kept).append(segment.text.strip())
+            if dropped:
+                print(f"  (dropped, not speech: {' '.join(dropped)})", flush=True)
+            raw = " ".join(kept).strip()
             if not raw:
                 print("  (nothing heard)", flush=True)
                 return

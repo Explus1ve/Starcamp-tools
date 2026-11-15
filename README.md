@@ -1,42 +1,42 @@
 # Tools × Claude
 
-A small shelf of tools for jobs that should be simple and are not.
+A small shelf of free tools for jobs that should be simple.
 
-Each one is built to be run by someone who is not a developer, working alongside an AI assistant. You do the deciding and the clicking. The assistant does the reading and the running. No subscriptions, no dashboards, no accounts, nothing phoning home.
+They are made for people who build with Claude Code, or want to: anyone with an idea and an AI assistant beside them. You do the deciding and the clicking. The assistant does the reading and the running. Every tool runs on your own computer, with nothing to subscribe to and nothing sent anywhere.
 
 ## What is here
 
 | Tool | What it does |
 |---|---|
-| [discord-tool-x-claude](discord-tool-x-claude/) | Stands up a complete Discord community server in one run — roles, categories, channels, permissions, moderation, a rules gate and onboarding. Run it again any time and it repairs what has drifted instead of duplicating it. |
-| [upscale-tool-x-claude](upscale-tool-x-claude/) | Enlarges images without them going soft or blocky — old photos, small logos, low-res screenshots, artwork. Runs entirely on your own machine, offline, no watermark, no credit counter. |
-| [voice-typing-x-claude](voice-typing-x-claude/) | Hold a key, speak, let go, and the text appears where your cursor already was. Local speech recognition on your own graphics card. Nothing uploaded, nothing billed. |
+| [discord-tool-x-claude](discord-tool-x-claude/) | Builds a complete Discord community server in one run: roles, categories, channels, permissions, moderation, a rules gate and the welcome question. Run it again any time and it puts back whatever has drifted, without making copies. |
+| [upscale-tool-x-claude](upscale-tool-x-claude/) | Enlarges images and keeps them sharp: old photos, small logos, low-resolution screenshots, artwork. Runs offline on your own computer, with no watermark and no credit counter. |
+| [voice-typing-x-claude](voice-typing-x-claude/) | Hold a key, speak, let go, and your words appear where your cursor already was. The speech recognition runs on your own graphics card and stays on your computer. |
 
 ## How to start
 
-Open the folder of the tool you want and read `START-HERE.md`. It contains a block of text to copy and paste as your first message to Claude, written so the assistant has everything it needs to guide you properly — including the habits that matter when a password is involved.
+Open the folder of the tool you want and read `START-HERE.md`. It holds a block of text to copy and paste as your first message to Claude. That message gives the assistant everything it needs to guide you well, including the habits that matter when a password is involved.
 
-That is the whole onboarding. Everything else happens in the conversation that follows.
+That is the whole start. Everything else happens in the conversation that follows.
 
 ## The shape every tool follows
 
-- **`START-HERE.md`** — what to say to begin.
-- **`README.md`** — what the tool is and what it does, in plain English.
-- **A setup guide** — every step, including where to click.
-- **`USING-IT.md`** — the part people get wrong, and how to get it right.
+- **`START-HERE.md`**: what to say to begin.
+- **`README.md`**: what the tool is and what it does, in plain English.
+- **A setup guide**: every step, including where to click.
+- **`USING-IT.md`**: the parts worth getting right, and how.
 
-If a tool cannot be used this way, it does not belong here.
+Every tool on this shelf works this way.
 
-## A word on safety
+## Keeping your passwords safe
 
-Some of these talk to services on your behalf and need a token to do it. **A token is a password.** It belongs in a local file that is never committed, never pasted into a chat window, and never caught in a screenshot. If one ever does get exposed, reset it before doing anything else. Each tool repeats this where it matters, because it matters.
+Some of these tools talk to an online service for you, and they use a token to do it. **A token is a password.** It lives in one local file on your computer. Keep it out of chat windows, screenshots and anything you share. If one is ever seen somewhere it should not be, reset it first, then carry on. Each tool says this again at the step where it matters.
 
 Anything that changes something live asks you first.
 
 ## License
 
-MIT unless a tool says otherwise in its own folder. Take them, change them, use them for your own thing.
+MIT, unless a tool's own folder says otherwise. Take them, change them, use them for your own thing.
 
 ---
 
-Built and used in the making of [Starcamp](https://starcamp.ai).
+Made at [Starcamp.ai](https://starcamp.ai), a community that practices AI together, in public.

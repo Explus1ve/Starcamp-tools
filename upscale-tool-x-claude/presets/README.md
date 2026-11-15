@@ -18,7 +18,7 @@ scripts at all, open PowerShell in the folder and run it this way instead,
 which allows just this one script without changing any settings
 permanently:
 
-```bash
+```powershell
 powershell -ExecutionPolicy Bypass -File .\photos.ps1
 ```
 

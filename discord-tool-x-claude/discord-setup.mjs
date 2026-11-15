@@ -18,7 +18,9 @@
  *   2. Copy env.local.example to .env.local, fill in your bot token + server
  *      ID there (never on the command line — that's how it ends up in shell
  *      history or a screenshot).
- *   3. node discord-setup.mjs
+ *   3. node discord-setup.mjs          — a preview: reads your server,
+ *      prints what a real run would do, and changes nothing.
+ *   4. node discord-setup.mjs --yes    — makes those changes, live.
  *
  * Bot setup steps (Discord Developer Portal + server) are in SETUP-BOT.md.
  */
@@ -30,6 +32,12 @@ import * as config from "./config.mjs";
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const API = "https://discord.com/api/v10";
+
+// Without --yes this is a preview: every write is counted and skipped, and
+// anything the plan would create gets this stand-in id.
+const APPLY = process.argv.includes("--yes");
+const PLANNED_ID = "planned";
+let plannedWrites = 0;
 
 async function loadLocalEnvFile() {
   const envPath = path.join(SCRIPT_DIR, ".env.local");
@@ -98,6 +106,14 @@ function sleep(ms) {
 }
 
 async function discordFetch(token, path, options = {}) {
+  const method = options.method ?? "GET";
+  if (!APPLY && (method !== "GET" || path.includes(PLANNED_ID))) {
+    // Preview: never write, and never ask Discord about something that only exists in the plan.
+    if (method === "GET") return [];
+    plannedWrites += 1;
+    return { id: PLANNED_ID, ...(options.body ? JSON.parse(options.body) : {}) };
+  }
+
   const res = await fetch(`${API}${path}`, {
     ...options,
     headers: { Authorization: `Bot ${token}`, "Content-Type": "application/json", ...options.headers },
@@ -139,13 +155,21 @@ async function main() {
   if (!token || !guildId) {
     console.error(
       "DISCORD_BOT_TOKEN and DISCORD_GUILD_ID must both be set.\n" +
-      "Copy env.local.example to .env.local and fill both in there.",
+      "Copy env.local.example to .env.local and fill both in there.\n" +
+      "Nothing was changed.",
     );
     process.exit(1);
   }
   if (!ROLES || !CATEGORIES) {
     console.error("config.mjs is missing ROLES or CATEGORIES — copy one of templates/*.mjs to config.mjs first.");
     process.exit(1);
+  }
+  if (!APPLY) {
+    console.log(
+      "PREVIEW — this run reads your server and changes nothing.\n" +
+      "Each line below says what a real run would do. To make the changes, run:\n" +
+      "  node discord-setup.mjs --yes\n",
+    );
   }
 
   const summary = {
@@ -199,12 +223,13 @@ async function main() {
     }
   }
 
-  // Reorder so the first role in ROLES ends up on top. Requires the bot's
-  // own role to already sit above all of these in the server's role list
-  // (see SETUP-BOT.md) — if this fails, drag the roles into order by hand
-  // in Server Settings → Roles.
+  // Reorder so ROLES runs lowest to highest: index 0 sits just above
+  // @everyone and the last role ends up on top. Requires the bot's own role
+  // to already sit above all of these in the server's role list (see
+  // SETUP-BOT.md) — if this fails, drag the roles into order by hand in
+  // Server Settings → Roles.
   try {
-    const positions = [...ROLES].reverse().filter((r) => roleByName.has(r.name)).map((r, i) => ({
+    const positions = ROLES.filter((r) => roleByName.has(r.name)).map((r, i) => ({
       id: roleByName.get(r.name).id,
       position: i + 1,
     }));
@@ -405,6 +430,14 @@ async function main() {
       if (missing.length > 0) {
         console.error(`  skipped — missing channel id(s) for: ${missing.join(", ")}`);
         summary.errors.push(`onboarding: missing channel ids for ${missing.join(", ")}`);
+      } else if (!grantRoleId) {
+        // Loud on purpose. Falling through here would write a VALID
+        // onboarding flow that grants nobody anything: the run would print
+        // success and every new member would land with no role and an almost
+        // empty server. A missing role and a working setup must never look
+        // the same.
+        console.error(`  skipped — no "${ONBOARDING_GRANTS_ROLE}" role found, so onboarding would grant nothing`);
+        summary.errors.push(`onboarding: role "${ONBOARDING_GRANTS_ROLE}" (ONBOARDING_GRANTS_ROLE) missing — no role would be granted on completion`);
       } else {
         await discordFetch(token, `/guilds/${guildId}/onboarding`, {
           method: "PUT",
@@ -422,7 +455,7 @@ async function main() {
                   title: o.title,
                   description: o.description ?? "",
                   channel_ids: [],
-                  role_ids: grantRoleId ? [grantRoleId] : [],
+                  role_ids: [grantRoleId],
                 })),
               },
             ],
@@ -469,7 +502,9 @@ async function main() {
   }
 
   // ---- permission check — proof, not just a log of what should have happened ----
-  console.log("\nPermission check (what's actually hidden from @everyone right now):");
+  console.log(APPLY
+    ? "\nPermission check (what's actually hidden from @everyone right now):"
+    : "\nPermission check (the server as it is now — the preview changed nothing):");
   try {
     const finalChannels = await discordFetch(token, `/guilds/${guildId}/channels`);
     for (const c of finalChannels.filter((c) => c.type !== CHANNEL_TYPE.category).sort((a, b) => a.name.localeCompare(b.name))) {
@@ -485,12 +520,15 @@ async function main() {
     summary.errors.push(`permission check: ${err.message}`);
   }
 
-  console.log("\n— done —");
+  console.log(APPLY ? "\n— done —" : "\n— preview done: the counts below are what a real run would do —");
   console.log(`roles: ${summary.rolesCreated} created, ${summary.rolesReused} reused`);
   console.log(`categories: ${summary.categoriesCreated} created, ${summary.categoriesSynced} synced`);
   console.log(`channels: ${summary.channelsCreated} created, ${summary.channelsSynced} synced`);
   console.log(`automod rules: ${summary.automodCreated} created, ${summary.automodReused} reused`);
   console.log(`pinned messages: ${summary.messagesPosted} posted, ${summary.messagesSkipped} already had content`);
+  if (!APPLY) {
+    console.log(`\nPreview only: ${plannedWrites} change(s) planned, none made. To make them, run:\n  node discord-setup.mjs --yes`);
+  }
   if (summary.errors.length > 0) {
     console.log(`\n${summary.errors.length} error(s):`);
     summary.errors.forEach((e) => console.log(`  - ${e}`));

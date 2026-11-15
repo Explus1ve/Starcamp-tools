@@ -11,9 +11,9 @@ scale — that actually determine whether the result looks good.
 > I want to upscale some images — [describe what they are: old family
 > photos, product shots, a logo, anime screenshots, game textures — and
 > what you want out of them: printing, a website, just seeing them
-> bigger]. I'm not very technical, so please explain things in plain
-> English and go step by step — don't assume I know what a "model" or a
-> "command line" means unless you've just told me.
+> bigger]. Please explain things in plain English and go step by step —
+> don't assume I know what a "model" or a "command line" means unless
+> you've just told me.
 >
 > There's a guide in this folder for Real-ESRGAN, a free local AI
 > upscaler: `README.md`, a setup walkthrough (`SETUP-UPSCALER.md`), a

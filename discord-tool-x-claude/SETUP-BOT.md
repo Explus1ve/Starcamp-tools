@@ -7,12 +7,25 @@ roles, categories, channels, permissions, moderation, rules gate, onboarding
 
 **Security note:** the bot token you'll get in step 3 is a password for
 that bot — anyone with it can control your server. Never paste it into a
-Claude chat, an email, or anywhere else. It goes into a local file (step 7),
+Claude chat, an email, or anywhere else. It goes into a local file (step 8),
 never into the terminal itself — that way there's nothing on screen to
 screenshot or leak by accident. If it ever does end up somewhere it
 shouldn't, reset it immediately (Developer Portal → your app → Bot → Reset
 Token) — resetting is instant, free, and the only real fix once a token's
 been seen somewhere it shouldn't.
+
+## Before you start: Node.js
+The two scripts run on Node.js, a free program that runs JavaScript on
+your computer. You need version 18 or newer. Check in a terminal:
+
+```
+node --version
+```
+
+If it prints `v18` or higher, you're set. If it prints an older number or
+"not recognized", install the LTS version (the long-term, stable one) from
+**nodejs.org**, then close and reopen your terminal and check again.
+Claude can walk you through it.
 
 ## 1. Pick a template
 Read `templates/README.md`, pick the one closest to what you're building,
@@ -74,16 +87,25 @@ or an accidental screenshot. Do this instead:
    placeholder lines with your real token and server ID, save.
 3. This file stays on your machine only — never commit it, never share it.
 
-## 9. Run the script
+## 9. Run the script — preview first, then for real
 In your own terminal, from this folder:
 
 ```
 node discord-setup.mjs
 ```
 
-It picks up the token and server ID from `.env.local` automatically. It
-prints what it's doing as it goes, and a summary at the end — created vs.
-already-existed vs. failed. It's safe to run more than once: it won't
+This first run is a preview. It picks up the token and server ID from
+`.env.local` automatically, reads your server, and prints every change a
+real run would make — and changes nothing. Read it through (paste it to
+Claude if you want it explained). When it looks right, make the changes:
+
+```
+node discord-setup.mjs --yes
+```
+
+That run changes your live server. It prints what it's doing as it goes,
+and a summary at the end — created vs. already-existed vs. failed. It's
+safe to run more than once: it won't
 duplicate channels or roles, but it does re-apply permissions, topics, and
 slow-mode every run — so if anything drifts from your `config.mjs` (a
 permission changed by hand, a topic edited), running it again puts it back.

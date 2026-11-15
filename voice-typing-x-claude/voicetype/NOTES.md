@@ -24,6 +24,10 @@ Each of these was a real bug. If you clean them up, you reintroduce it.
 
 `_load_model()` also tries CUDA, **proves** it with a real transcribe, and falls back to the processor if that throws. `get_cuda_device_count()` alone is not enough — it reports a device even when the CUDA libraries cannot load. If you end up on the processor, the tool is working-but-slow, not broken.
 
+**The tool never contacts Hugging Face.** `_model_path()` loads the model from disk only (`local_files_only=True`, or a folder path in `VOICETYPE_MODEL`) and exits with the manual download command if it is missing. Left to itself, faster-whisper checks Hugging Face for a newer model on every start, so a dictation tool would phone out each time you open it and could swap models without you asking. Model updates are a hand step.
+
+**Phantom lines are dropped, never pasted.** Whisper learned from subtitled video, so near-silence can come out as "Closed Captioning by …" or "Thanks for watching". `is_phantom()` drops a segment that is wholly such a credit, or that Whisper itself scores as no speech and low confidence. Dropped text is printed to the terminal so you can see it happened.
+
 ## The files
 
 | File | What it is |
@@ -42,4 +46,4 @@ Each of these was a real bug. If you clean them up, you reintroduce it.
 | `history.jsonl` | A local transcript log, capped at the newest 500 entries. Mainly to recover a long dictation lost before sending, and to see what the tool actually mishears. Never commit it — it is a record of everything you have said. |
 | `overlay-position.json` | Where the ring was last dragged. Written on drop. |
 
-Add all three to a `.gitignore` if you put your copy under version control.
+All three are already listed in this folder's `.gitignore`, so they stay out if you put your copy under version control.

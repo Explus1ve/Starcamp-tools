@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+history.jsonl
+overlay-position.json
+*.wav
+vocab.txt

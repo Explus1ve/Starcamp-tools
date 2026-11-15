@@ -1,69 +1,55 @@
 # Discord Tool × Claude
 
-A free toolkit for standing up a fully configured Discord community
-server — roles, categories, channels, permissions, moderation, a
-rules-agreement gate, and onboarding — in one run. It was thought up and
-built together with Claude, and it does the job as well as (often better
-than) the paid third-party bots that offer the same setup, without a
-subscription, without an always-on bot, and without a dashboard login. It
-was inspired by an earlier Discord setup that used this exact approach.
+A free toolkit that builds a fully set-up Discord community server in one run: roles, categories, channels, permissions, moderation, a rules gate and a welcome question. It was built together with Claude, and it runs from your own computer, with no subscription, no bot left running and no dashboard to sign in to.
 
-You run one script, once. It talks to Discord directly and builds
-everything. Run it again any time and it repairs anything that's drifted
-instead of duplicating things. A second, read-only script lets you (or
-Claude) inspect exactly what's live on your server whenever you want a
-second opinion.
+You run one script. It talks to Discord directly and builds everything. Run it again any time and it repairs whatever has drifted, without making copies. A second script only reads: it shows you, or Claude, exactly what is live on your server, whenever you want a second opinion.
 
-No coding required on your end — Claude does the writing and the running;
-you do the clicking inside Discord and the deciding on what things are
-called.
+Claude does the writing and the running. You do the clicking inside Discord and the deciding on what things are called.
 
 ## What it does
 
-- Builds a role ladder, categories, and channels from a template you pick
-  and customize.
-- Sets channel-by-channel permissions (who can see what, who can post
-  where, staff-only or paid-only areas) and slow-mode on busy channels.
-- Turns on two free AutoMod rules (a blocked-keyword filter, a mention-spam
-  guard).
-- Sets the rules-agreement gate people check off before they can chat.
-- Sets the one onboarding question new members answer, which grants them
-  their starting role automatically.
-- Posts and pins your welcome/rules copy — but only into channels that are
-  still empty, so it never overwrites anything you've written by hand.
-- Adopts the "rules" and "moderator-only" channels Discord auto-creates the
-  moment you turn on Community mode, instead of leaving duplicates next to
-  your own.
-- Everything is free — no Discord Nitro, no server boost required.
+- Builds a ladder of roles, then categories and channels, from a template you pick and adjust. (A role is a label on a member that decides what they can see and do. A category is a folder of channels.)
+- Sets who can see and post in each channel, including staff-only or members-only areas, and slow-mode on busy channels. (Slow-mode makes people wait a few seconds between messages.)
+- Turns on two of Discord's free AutoMod rules, its built-in moderator: one blocks offensive words, one stops someone tagging a crowd of people at once.
+- Sets the rules gate, the short list new people agree to before they can chat.
+- Sets the one welcome question new members answer, which gives them their starting role automatically.
+- Posts and pins your welcome and rules messages, only into channels that are still empty, so anything you wrote by hand stays as it is.
+- Takes over the "rules" and "moderator-only" channels Discord makes by itself when you turn on Community mode, so you end up with one of each.
+- Uses only Discord's free features. No Nitro, no server boost.
+
+## What it changes, and when it asks
+
+The setup script starts with a preview. `node discord-setup.mjs` reads your server, prints every change a real run would make, and changes nothing. You read the plan, with Claude if you like. When it looks right, `node discord-setup.mjs --yes` makes those changes on your live server: it creates, renames and moves roles and channels, resets each channel's permissions to match your settings, and, where Discord made its own rules channel, removes the duplicate.
+
+The inspector, `discord-inspect.mjs`, only reads. Run it as often as you like.
+
+## What you need
+
+- A Discord account and a server you own, or a new one.
+- Node.js, the free program that runs the two scripts, version 18 or newer. Claude can check whether you have it and help you install it.
+- About an hour, most of it inside Discord's settings.
 
 ## What's inside
 
 | File | What it's for |
 |---|---|
-| `START-HERE.md` | The prompt — paste it as your first message to Claude. |
-| `SETUP-BOT.md` | Click-by-click walkthrough for the one part that happens inside Discord itself: creating the bot that runs the script. |
-| `discord-setup.mjs` | The builder. Reads `config.mjs`, builds/repairs your server. |
-| `discord-inspect.mjs` | The read-only twin. Prints exactly what's live on your server right now — roles, permissions, the actual rules text, onboarding setup — without changing anything. |
-| `templates/` | Three starting configs to pick from and customize — see `templates/README.md`. |
-| `env.local.example` | Copy to `.env.local` and fill in your bot's token and server ID there — never in the terminal, never in a chat. |
+| `START-HERE.md` | The message to paste as your first one to Claude. |
+| `SETUP-BOT.md` | Click by click, the part that happens inside Discord: creating the bot that runs the script. (A bot is an account a program uses instead of a person.) |
+| `discord-setup.mjs` | The builder. Reads `config.mjs`, previews what it would change, and with `--yes` builds or repairs your server. |
+| `discord-inspect.mjs` | The reader. Prints exactly what is live on your server right now: roles, permissions, the rules text, the welcome question. It changes nothing. |
+| `templates/` | Three starting setups to pick from and adjust. See `templates/README.md`. |
+| `env.local.example` | Copy it to `.env.local` and put your bot's token and server ID there, in that one file. |
 
 ## Quick start
 
-1. Read `templates/README.md`, pick a template, copy it to `config.mjs` in
-   this folder.
+1. Read `templates/README.md`, pick a template, and copy it to `config.mjs` in this folder.
 2. Follow `SETUP-BOT.md` to create your bot and get its token.
-3. `node discord-setup.mjs` — read what it prints.
-4. `node discord-inspect.mjs` before you delete the bot, to confirm the
-   real state with a second, independent check.
+3. Run `node discord-setup.mjs` and read the preview it prints.
+4. When the plan looks right, run `node discord-setup.mjs --yes` to make the changes.
+5. Run `node discord-inspect.mjs` before you remove the bot, for a second, independent check.
 
-Or skip straight to `START-HERE.md` and hand the whole thing to Claude.
+Or start with `START-HERE.md` and hand the whole thing to Claude.
 
-## A word on the token
+## The token is a password
 
-The bot token you'll get while following `SETUP-BOT.md` is a password —
-whoever has it can control your server. Keep it in `.env.local` only,
-never in a chat, never typed into a terminal command directly (that's how
-it ends up in shell history or a screenshot). If it's ever exposed
-anywhere it shouldn't be, reset it immediately in Discord's Developer
-Portal — that's an instant, free fix, and the only one that actually
-matters once a token's been seen somewhere it shouldn't.
+While following `SETUP-BOT.md` you get a bot token. Whoever has it can control your server. It belongs in `.env.local` and nowhere else: keep it out of chats and out of terminal commands, where it can end up in your command history or a screenshot. If it is ever seen somewhere it should not be, reset it in Discord's Developer Portal. That takes a moment, it is free, and it is the fix that counts.

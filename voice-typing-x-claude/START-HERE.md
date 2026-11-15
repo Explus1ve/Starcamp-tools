@@ -11,14 +11,16 @@ an unprepared setup goes wrong.
 > I want to set up voicetype — the push-to-talk dictation tool that types
 > what I say into whatever window I'm in, built for dictating prompts into
 > the Claude Code CLI. [Say whether this is a fresh machine, or you've
-> used it before and something's broken.] I'm not very technical, so
-> please explain things in plain English and go step by step.
+> used it before and something's broken.] Please explain things in plain
+> English and go step by step.
 >
 > Everything is in this folder: the tool's code in `voicetype/`, a
 > `README.md`, a setup walkthrough (`SETUP-VOICETYPE.md`), a page about the
 > AI model (`THE-MODEL.md`), a usage reference (`USING-IT.md`), and three
 > starter vocabulary files in `vocab/`. Nothing has to be downloaded from
-> anywhere except the libraries and the model, and both fetch themselves.
+> anywhere except the libraries and the model. The libraries install with
+> `uv sync`; the model is one command I run by hand, once, and after that
+> the tool never goes online.
 > Here's what I'd like you to do:
 >
 > 1. Read `README.md` and `THE-MODEL.md` before we start. The model is a
@@ -30,9 +32,10 @@ an unprepared setup goes wrong.
 >    before I start downloading, and walk me through moving the cache.
 > 3. Walk me through `SETUP-VOICETYPE.md` step by step. Tell me when a
 >    step is going to take several minutes so I don't think it's frozen.
-> 4. When we get to the first run, tell me what "normal" looks like —
->    what it prints, how long the model download takes, and how I know
->    it's actually listening rather than stuck.
+> 4. When we get to the model download, tell me how long it takes and
+>    what it prints when it's done. Then at the first run, tell me what
+>    "normal" looks like — what it prints, and how I know it's actually
+>    listening rather than stuck.
 > 5. Once it works, help me create my `vocab.txt` from one of the starter
 >    files in `vocab/` — there isn't one yet, I make it. Ask me what words
 >    I actually say a lot — my projects, clients, place names, the jargon
