@@ -182,7 +182,9 @@ async function main() {
   }
 
   console.log(`\n--- Membership screening (rules gate) ---`);
-  if (!screening?.enabled) {
+  // Discord's member-verification reply carries no `enabled` field, so reading it
+  // printed OFF even with the gate on. The server's feature flag is the truth.
+  if (!guild.features?.includes("MEMBER_VERIFICATION_GATE_ENABLED")) {
     console.log("  OFF");
   } else {
     console.log("  ON — text currently shown to joiners:");
